@@ -533,7 +533,7 @@
 		background: #fff;
 		border-radius: 8px;
 		border-top-left-radius: 2px;
-		padding: 6px 8px 5px;
+		padding: 6px 8px 4px;
 		max-width: 82%;
 		align-self: flex-start;
 		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
@@ -568,8 +568,8 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		margin-top: 2px;
-		font-size: 11.5px;
+		margin-top: 0;
+		font-size: 11px;
 		line-height: 1.2;
 		color: #8696a0;
 	}
@@ -579,7 +579,7 @@
 		padding: 0 2px;
 		margin: 0;
 		color: #8696a0;
-		font-size: 11.5px;
+		font-size: 11px;
 		line-height: 1.2;
 		font-weight: 700;
 		display: inline-flex;
@@ -619,7 +619,7 @@
 		padding: 4px 0;
 	}
 	.more {
-		margin: 0 auto 12px;
+		margin: 2px auto 6px;
 		background: none;
 		border: 1px solid var(--line);
 		border-radius: 99px;
@@ -647,7 +647,7 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+		padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
 		border-top: 0;
 		background: #f0f2f5;
 		flex: none;
@@ -661,7 +661,7 @@
 		flex: 1;
 		border: 0;
 		border-radius: 20px;
-		padding: 9px 14px;
+		padding: 8px 12px;
 		font-size: 14px;
 		min-width: 0;
 		background: #fff;
