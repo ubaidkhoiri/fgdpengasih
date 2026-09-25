@@ -44,8 +44,8 @@
 
 <div class="rd">
 	{#each days as day}
-		<section class="rday">
-			<header class="rhead"><strong>{day.day}</strong><span>{day.date}</span></header>
+		<section class="rday" aria-label="{day.day}, {day.date}">
+			<h2 class="rhead">{day.day}<span>{day.date}</span></h2>
 			<ol class="ritems">
 				{#each day.items as it}
 					<li class="ritem">
@@ -68,32 +68,32 @@
 		min-height: 0;
 		overflow-y: auto;
 		scrollbar-width: none;
-		padding: 4px 18px 20px;
+		padding: var(--spacing-2xs) var(--spacing-card) var(--spacing-m);
 	}
 	.rd::-webkit-scrollbar {
 		display: none;
 	}
-	.rhead {
-		position: sticky;
-		top: 0;
-		z-index: 2;
-		background: #fff;
-		padding: 10px 0 8px;
-		border-bottom: 2px solid var(--green);
-		margin-bottom: 4px;
+	.rday {
+		margin-top: var(--spacing-heading-before);
 	}
-	.rhead strong {
-		display: block;
-		font-size: 20px;
-		letter-spacing: -0.03em;
+	.rday:first-child {
+		margin-top: var(--spacing-xs);
+	}
+	.rhead {
+		margin: 0 0 var(--spacing-heading-after);
+		font-size: var(--text-h2);
+		line-height: var(--leading-h2);
+		letter-spacing: -0.02em;
+		color: var(--color-text-strong);
 	}
 	.rhead span {
-		font-size: 13px;
-		color: var(--muted);
-		font-weight: 600;
-	}
-	.rday + .rday {
-		margin-top: 14px;
+		display: block;
+		margin-top: var(--spacing-2xs);
+		font-size: var(--text-caption);
+		line-height: var(--leading-caption);
+		font-weight: 400;
+		letter-spacing: 0;
+		color: var(--color-text-weak);
 	}
 	.ritems {
 		list-style: none;
@@ -102,20 +102,21 @@
 	}
 	.ritem {
 		display: grid;
-		grid-template-columns: 92px 18px 1fr;
-		gap: 8px;
-		padding: 9px 0;
-		position: relative;
+		grid-template-columns: 96px 18px 1fr;
+		gap: var(--spacing-xs);
+		padding: var(--spacing-xs) 0;
 	}
 	.ritem + .ritem {
-		border-top: 1px solid var(--line);
+		border-top: 1px solid var(--color-stroke-weak);
 	}
 	.rtime {
-		font-size: 12px;
-		font-weight: 800;
-		color: var(--green);
-		font-variant-numeric: tabular-nums;
-		padding-top: 2px;
+		padding-top: var(--spacing-2xs);
+		font-size: var(--text-caption);
+		line-height: var(--leading-caption);
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		color: var(--color-text-weak);
+		font-feature-settings: var(--font-numeric-features);
 	}
 	.rrail {
 		position: relative;
@@ -124,35 +125,37 @@
 		content: '';
 		position: absolute;
 		left: 5px;
-		top: 6px;
+		top: 8px;
 		width: 8px;
 		height: 8px;
-		border-radius: 50%;
-		background: var(--mint);
-		border: 2px solid var(--green);
+		border-radius: var(--radius-full);
+		background: var(--color-fill-brand);
+		border: 2px solid var(--color-stroke-brand-strong);
 	}
 	.rrail::after {
 		content: '';
 		position: absolute;
 		left: 8px;
-		top: 20px;
+		top: 24px;
 		bottom: -12px;
 		width: 2px;
-		background: var(--line);
+		background: var(--color-stroke-weak);
 	}
 	.ritem:last-child .rrail::after {
 		display: none;
 	}
 	.rbody p {
 		margin: 0;
-		font-size: 14.5px;
-		line-height: 1.5;
+		font-size: var(--text-body);
+		line-height: var(--leading-body);
+		color: var(--color-text-strong);
 	}
 	.rsub {
-		margin-top: 3px;
-		font-size: 12.5px;
-		color: var(--muted);
-		border-left: 2px solid var(--mint);
-		padding-left: 8px;
+		margin-top: var(--spacing-2xs);
+		padding-left: var(--spacing-xs);
+		border-left: 2px solid var(--color-stroke-brand-weak);
+		font-size: var(--text-caption);
+		line-height: var(--leading-caption);
+		color: var(--color-text-weak);
 	}
 </style>
