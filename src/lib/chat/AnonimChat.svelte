@@ -533,7 +533,7 @@
 		background: #fff;
 		border-radius: 8px;
 		border-top-left-radius: 2px;
-		padding: 6px 8px 4px;
+		padding: 6px 8px 2px;
 		max-width: 82%;
 		align-self: flex-start;
 		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
@@ -568,7 +568,7 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		margin-top: 0;
+		margin-top: 4px;
 		font-size: 11px;
 		line-height: 1.2;
 		color: #8696a0;
