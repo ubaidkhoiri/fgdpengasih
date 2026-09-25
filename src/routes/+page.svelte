@@ -269,7 +269,7 @@
 <div class="pop" role="menu">
 <button type="button" role="menuitem" onclick={openFoto}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8.5 7 10 4.5h4L15.5 7"/></svg>Kirim foto</button>
 <button type="button" role="menuitem" onclick={openChat}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z"/></svg>Anonim Chat</button>
-<button type="button" role="menuitem" onclick={openRd}>Rundown</button>
+<button type="button" role="menuitem" onclick={openRd}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Rundown</button>
 </div>
 {/if}
 </nav>
