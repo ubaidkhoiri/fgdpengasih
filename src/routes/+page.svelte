@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let progress = $state('0 dari 8 poin selesai.');
+	let progress = $state('0 dari 5 poin selesai.');
 
 	// Checklist wiring, guarded. Base worksheet JS dropped: ids
 	// group/scribe/problem/solution/action/copyBtn/printBtn/clearBtn/saveStatus
@@ -11,7 +11,7 @@
 		const el = document.getElementById('progress');
 		function update() {
 			const n = boxes.filter((x) => x.checked).length;
-			progress = n + ' dari ' + boxes.length + ' poin selesai' + (n === boxes.length ? ' · Hasil siap divalidasi!' : '.');
+			progress = n + ' dari ' + boxes.length + ' poin selesai' + (n === boxes.length ? ' · Hasil siap dipresentasikan!' : '.');
 			boxes.forEach((x) => x.closest('.check')?.classList.toggle('done', x.checked));
 		}
 		boxes.forEach((x) => x.addEventListener('change', update));
@@ -82,14 +82,11 @@
 <section class="section wrap" id="cek">
 <div class="section-head"><div><div class="kicker">05 / Sebelum selesai</div><h2>Checklist hasil kelompok</h2><p class="sub">Centang setiap hal yang sudah disepakati sebelum dua perwakilan mempresentasikan hasil.</p></div></div>
 <div class="checklist" id="checklist">
-<label class="check"><input type="checkbox"><span>Masalah prioritas dirumuskan dengan jelas.</span></label>
-<label class="check"><input type="checkbox"><span>Penyebab dan pihak terdampak sudah dipahami.</span></label>
-<label class="check"><input type="checkbox"><span>Solusi realistis sudah disepakati.</span></label>
-<label class="check"><input type="checkbox"><span>Action plan memiliki kegiatan dan sasaran yang jelas.</span></label>
-<label class="check"><input type="checkbox"><span>Pelaksana / PIC dan pihak yang dilibatkan sudah ditentukan.</span></label>
-<label class="check"><input type="checkbox"><span>Waktu, kebutuhan sumber daya / dana, dan indikator sudah dibahas.</span></label>
-<label class="check"><input type="checkbox"><span>Notulen sudah menulis hasil di form 3 kolom.</span></label>
-<label class="check"><input type="checkbox"><span>Kelompok sudah memvalidasi dan menyepakati hasil.</span></label>
+<label class="check"><input type="checkbox"><span>Tata cara FGD dari briefing ketua sudah dipahami.</span></label>
+<label class="check"><input type="checkbox"><span>Kelompok sudah kumpul dan persoalan yang dirasakan terkumpul.</span></label>
+<label class="check"><input type="checkbox"><span>Masalah dikelompokkan, solusi dan aksi prioritas sudah dipilih.</span></label>
+<label class="check"><input type="checkbox"><span>Notulen mencatat di form, rumusan dan tindak lanjut disepakati.</span></label>
+<label class="check"><input type="checkbox"><span>Dua generus siap mempresentasikan hasil kelompok.</span></label>
 </div>
 <div class="callout" id="progress" aria-live="polite">{progress}</div>
 </section>
