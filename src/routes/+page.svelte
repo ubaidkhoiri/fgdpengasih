@@ -36,7 +36,7 @@
 <article class="panel step"><div class="step-num">04</div><h3>Catat & Sepakati</h3><p>Notulen mencatat masalah, solusi, dan action plan/program sesuai form. Dan menyepakati rumusan serta langkah tindak lanjut.</p><small>Notulen</small></article>
 <article class="panel step"><div class="step-num">05</div><h3>Presentasi 2 orang</h3><p>Dua orang perwakilan menyampaikan ringkasan hasil diskusi kelompok: masalah utama, solusi, dan rencana program.</p><small>2 Generus</small></article>
 </div>
-<div class="flow" aria-label="Urutan proses diskusi"><span>Buka tujuan</span><b>→</b><span>Curah pengalaman</span><b>→</b><span>Kelompokkan masalah</span><b>→</b><span>Pilih prioritas</span><b>→</b><span>Gali penyebab</span><b>→</b><span>Susun aksi</span><b>→</b><span>Sepakati PIC</span><b>→</b><span>Validasi hasil</span></div>
+<div class="flow" aria-label="Urutan proses diskusi"><span>Briefing ketua</span><b>→</b><span>Kumpul kelompok</span><b>→</b><span>Diskusi</span><b>→</b><span>Catat & sepakati</span><b>→</b><span>Presentasi 2 orang</span></div>
 <div class="callout"><b>Catatan penting:</b> tidak semua masalah harus diselesaikan sekaligus. Pilih yang paling mendesak dan paling mungkin dikerjakan.</div>
 </section>
 <section class="section wrap" id="peran">
