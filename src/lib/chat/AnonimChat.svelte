@@ -4,8 +4,14 @@
 	let {
 		adminUnlock = false,
 		open = true,
-		refreshTick = 0
-	}: { adminUnlock?: boolean; open?: boolean; refreshTick?: number } = $props();
+		refreshTick = 0,
+		filterOpen = $bindable(false)
+	}: {
+		adminUnlock?: boolean;
+		open?: boolean;
+		refreshTick?: number;
+		filterOpen?: boolean;
+	} = $props();
 
 	type Msg = {
 		id: string;
@@ -38,11 +44,32 @@
 
 	const DEVICE_LS = 'fgd-chat-device';
 	const DRAFT_LS = 'fgd-chat-draft';
+	const VIEW_LS = 'fgd-chat-view';
+	type Order = 'new' | 'old' | 'top';
+	type Filter = 'all' | 'replied' | 'unreplied';
+
+	function setOrder(o: Order) {
+		filterOpen = false;
+		if (view.order === o) return;
+		view.order = o;
+		load(false);
+	}
+
+	function setFilter(f: Filter) {
+		filterOpen = false;
+		view.filter = f;
+	}
 	const ADMIN_LS = 'fgd-chat-admin';
 	const POLL_MS = 5000;
 	const IDLE_MS = 15000;
 
 	let msgs: Msg[] = $state([]);
+	let view: { order: Order; filter: Filter } = $state({ order: 'new', filter: 'all' });
+	let visible = $derived(
+		view.filter === 'all'
+			? msgs
+			: msgs.filter((m) => (view.filter === 'replied' ? m.replyCount > 0 : m.replyCount === 0))
+	);
 	let replies: Record<string, Msg[]> = $state({});
 	let replyDraft: Record<string, string> = $state({});
 	let openThread: string | null = $state(null);
@@ -106,7 +133,7 @@
 
 	async function load(initial = false) {
 		try {
-			const r = await fetch('/api/chat?limit=30');
+			const r = await fetch(`/api/chat?limit=30&order=${view.order}`);
 			const j: ApiBody = await r.json();
 			if (r.status === 503) {
 				dbDown = true;
@@ -126,9 +153,12 @@
 
 	async function poll(): Promise<number> {
 		try {
-			const r = await fetch(`/api/chat?limit=10&since=${encodeURIComponent(latestStamp())}`, {
-				headers: hdrs()
-			});
+			const r = await fetch(
+				`/api/chat?limit=10&order=new&since=${encodeURIComponent(latestStamp())}`,
+				{
+					headers: hdrs()
+				}
+			);
 			if (!r.ok) return 0;
 			const j: ApiBody = await r.json();
 			const fresh: Msg[] = j.messages ?? [];
@@ -147,7 +177,9 @@
 		if (!nextCursor || loadingMore) return;
 		loadingMore = true;
 		try {
-			const r = await fetch(`/api/chat?limit=30&cursor=${encodeURIComponent(nextCursor)}`);
+			const r = await fetch(
+				`/api/chat?limit=30&order=${view.order}&cursor=${encodeURIComponent(nextCursor)}`
+			);
 			const j: ApiBody = await r.json();
 			if (!r.ok) throw new Error(j.error ?? 'gagal memuat');
 			const known = new Set(msgs.map((m) => m.id));
@@ -326,6 +358,14 @@
 				localStorage.setItem(DEVICE_LS, dk);
 			}
 			draft = localStorage.getItem(DRAFT_LS) ?? '';
+			try {
+				const v = JSON.parse(localStorage.getItem(VIEW_LS) ?? '');
+				if (v && (v.order === 'new' || v.order === 'old' || v.order === 'top')) view.order = v.order;
+				if (v && (v.filter === 'all' || v.filter === 'replied' || v.filter === 'unreplied'))
+					view.filter = v.filter;
+			} catch {
+				/* abaikan */
+			}
 		} catch {
 			dk = `d-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 		}
@@ -364,13 +404,39 @@
 	$effect(() => {
 		try {
 			localStorage.setItem(DRAFT_LS, draft);
+			localStorage.setItem(VIEW_LS, JSON.stringify(view));
 		} catch {
 			/* abaikan */
 		}
 	});
+
+	$effect(() => {
+		if (!filterOpen) return;
+		const close = (e: MouseEvent) => {
+			if (!(e.target as HTMLElement).closest('.fpop,.filter-btn')) filterOpen = false;
+		};
+		document.addEventListener('click', close);
+		return () => document.removeEventListener('click', close);
+	});
 </script>
 
 <div class="chat">
+	{#if filterOpen}
+		<div class="fpop" role="dialog" aria-label="Filter dan urutan">
+			<p class="fcap">Urutkan</p>
+			<div class="fgroup">
+				<button type="button" data-on={view.order === 'new'} onclick={() => setOrder('new')}>Terbaru</button>
+				<button type="button" data-on={view.order === 'old'} onclick={() => setOrder('old')}>Terlama</button>
+				<button type="button" data-on={view.order === 'top'} onclick={() => setOrder('top')}>Terpopuler</button>
+			</div>
+			<p class="fcap">Tampilkan</p>
+			<div class="fgroup">
+				<button type="button" data-on={view.filter === 'all'} onclick={() => setFilter('all')}>Semua</button>
+				<button type="button" data-on={view.filter === 'replied'} onclick={() => setFilter('replied')}>Sudah dibalas</button>
+				<button type="button" data-on={view.filter === 'unreplied'} onclick={() => setFilter('unreplied')}>Belum dibalas</button>
+			</div>
+		</div>
+	{/if}
 	<div class="pin" role="note">
 		<strong>Perhatian, ruang anonim bersama.</strong>
 		Jaga bahasa, dilarang menyakiti atau merendahkan siapa pun. Pesan yang dilaporkan 5 orang otomatis disembunyikan.
@@ -414,9 +480,11 @@
 		<p class="state">Memuat percakapan…</p>
 	{:else if (!msgs.length)}
 		<p class="state">Belum ada pesan. Jadilah yang pertama menyapa.</p>
+	{:else if (!visible.length)}
+		<p class="state">Tidak ada yang cocok dengan filter ini.</p>
 	{:else}
 		<ul class="list">
-			{#each msgs as m (m.id)}
+			{#each visible as m (m.id)}
 				<li class="bubble" class:mine={m.mine} class:pending={m.pending} class:hidden={m.isHidden}>
 					{#if m.isHidden}<span class="tag-hidden">tersembunyi</span>{/if}
 					<p class="body">{m.body}<span class="time">{ago(m.createdAt)}{#if m.mine}{#if m.pending}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>{:else}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12.5 7 17l4.5-4.5M7.5 12.5 12 17l9.5-9.5"/></svg>{/if}{/if}</span></p>
@@ -546,6 +614,52 @@
 		height: 100%;
 		min-height: 0;
 		background: #efeae2;
+		position: relative;
+	}
+	.fpop {
+		position: absolute;
+		top: 8px;
+		right: 12px;
+		z-index: 5;
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 14px;
+		box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+		padding: 12px;
+		width: 220px;
+	}
+	.fcap {
+		margin: 0 0 6px;
+		font-size: 11px;
+		font-weight: 800;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--muted);
+	}
+	.fcap + .fgroup {
+		margin-bottom: 10px;
+	}
+	.fgroup {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+	.fgroup:last-child {
+		margin-bottom: 0;
+	}
+	.fgroup button {
+		border: 1px solid var(--line);
+		background: none;
+		border-radius: 99px;
+		padding: 6px 12px;
+		font-size: 12.5px;
+		font-weight: 700;
+		color: var(--ink);
+	}
+	.fgroup button[data-on='true'] {
+		background: var(--green);
+		border-color: var(--green);
+		color: #fff;
 	}
 	.pin {
 		background: #fff8e6;
@@ -567,10 +681,14 @@
 		margin: 0;
 		padding: 12px;
 		overflow-y: auto;
+		scrollbar-width: none;
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 6px;
+		gap: 2px;
+	}
+	.list::-webkit-scrollbar {
+		display: none;
 	}
 	.bubble {
 		background: #fff;

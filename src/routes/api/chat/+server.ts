@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import { and, desc, eq, gt, inArray, isNull, lt, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, inArray, isNull, lt, or, sql } from 'drizzle-orm';
 import { getDb } from '$lib/server/db/client';
 import { hitLimit } from '$lib/server/db/ratelimit';
 import { containsProfanity } from '$lib/server/db/profanity';
@@ -20,6 +20,8 @@ export async function GET({ url, platform, request }) {
 	const limit = Math.min(Math.max(Number(url.searchParams.get('limit') ?? 30), 1), 50);
 	const cursorRaw = url.searchParams.get('cursor');
 	const sinceRaw = url.searchParams.get('since');
+	const orderRaw = url.searchParams.get('order');
+	const order = orderRaw === 'old' ? 'old' : orderRaw === 'top' ? 'top' : 'new';
 	const deviceKey = request.headers.get('x-device-key') ?? '';
 	const isAdmin = await verifyAdminToken(
 		request.headers.get('x-admin-token') ?? '',
@@ -29,8 +31,24 @@ export async function GET({ url, platform, request }) {
 		? [isNull(chatMessages.parentId)]
 		: [eq(chatMessages.isHidden, false), isNull(chatMessages.parentId)];
 	if (cursorRaw) {
-		const d = new Date(cursorRaw);
-		if (!isNaN(d.getTime())) conds.push(lt(chatMessages.createdAt, d));
+		if (order === 'top') {
+			const [likeRaw, isoRaw] = cursorRaw.split('|');
+			const cl = Number(likeRaw);
+			const ci = new Date(isoRaw ?? '');
+			if (Number.isFinite(cl) && !isNaN(ci.getTime()))
+				conds.push(
+					or(
+						lt(chatMessages.likes, cl),
+						and(eq(chatMessages.likes, cl), lt(chatMessages.createdAt, ci))
+					)
+				);
+		} else {
+			const d = new Date(cursorRaw);
+			if (!isNaN(d.getTime()))
+				conds.push(
+					order === 'old' ? gt(chatMessages.createdAt, d) : lt(chatMessages.createdAt, d)
+				);
+		}
 	}
 	if (sinceRaw) {
 		const d = new Date(sinceRaw);
@@ -40,7 +58,13 @@ export async function GET({ url, platform, request }) {
 		.select()
 		.from(chatMessages)
 		.where(and(...conds))
-		.orderBy(desc(chatMessages.createdAt))
+		.orderBy(
+			...(order === 'top'
+				? [desc(chatMessages.likes), desc(chatMessages.createdAt)]
+				: order === 'old'
+					? [asc(chatMessages.createdAt)]
+					: [desc(chatMessages.createdAt)])
+		)
 		.limit(limit + 1);
 	const page = rows.slice(0, limit);
 	const ids = page.map((r) => r.id);
@@ -74,7 +98,11 @@ export async function GET({ url, platform, request }) {
 			mine: deviceKey !== '' && m.deviceKey === deviceKey
 		})),
 		hasMore: rows.length > limit,
-		nextCursor: page.length ? page[page.length - 1].createdAt.toISOString() : null
+		nextCursor: page.length
+			? order === 'top'
+				? `${page[page.length - 1].likes}|${page[page.length - 1].createdAt.toISOString()}`
+				: page[page.length - 1].createdAt.toISOString()
+			: null
 	});
 }
 

@@ -13,6 +13,7 @@
 	let chatBye = $state(false);
 	let chatT = 0;
 	let chatRefresh = $state(0);
+	let chatFilterOpen = $state(false);
 	let adminUnlock = $state(false);
 	let titleTaps = 0;
 	let titleT = 0;
@@ -117,7 +118,8 @@
 		};
 		const onKey = (e: KeyboardEvent) => {
 			if (e.key !== 'Escape') return;
-			if (chatOpen) closeChat();
+			if (chatOpen && chatFilterOpen) chatFilterOpen = false;
+			else if (chatOpen) closeChat();
 			else if (fotoOpen) closeFoto();
 			else if (menuOpen) menuOpen = false;
 		};
@@ -259,9 +261,9 @@
 {#if chatOpen}
 <div class="sheet-bg" class:bye={chatBye} onclick={closeChat} aria-hidden="true"></div>
 <div class="sheet tall" class:bye={chatBye} role="dialog" aria-modal="true" aria-label="Anonim Chat">
-<div class="sheet-head"><strong onclick={tapTitle} role="presentation">Anonim Chat</strong><span class="sheet-btns"><button type="button" class="sheet-x" onclick={() => (chatRefresh += 1)} aria-label="Muat ulang"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v4h-4"/></svg></button><button type="button" class="sheet-x" onclick={closeChat} aria-label="Tutup"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></span></div>
+<div class="sheet-head"><strong onclick={tapTitle} role="presentation">Anonim Chat</strong><span class="sheet-btns"><button type="button" class="sheet-x filter-btn" onclick={() => (chatFilterOpen = !chatFilterOpen)} aria-label="Filter dan urutan" aria-expanded={chatFilterOpen}><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8v5l-4 2v-7z"/></svg></button><button type="button" class="sheet-x" onclick={() => (chatRefresh += 1)} aria-label="Muat ulang"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v4h-4"/></svg></button><button type="button" class="sheet-x" onclick={closeChat} aria-label="Tutup"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></span></div>
 <div class="sheet-body">
-{#if chatMounted}<AnonimChat adminUnlock={adminUnlock} open={chatOpen} refreshTick={chatRefresh} />{/if}
+{#if chatMounted}<AnonimChat adminUnlock={adminUnlock} open={chatOpen} refreshTick={chatRefresh} bind:filterOpen={chatFilterOpen} />{/if}
 </div>
 </div>
 {/if}
