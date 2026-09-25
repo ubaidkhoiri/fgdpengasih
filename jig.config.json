@@ -1,0 +1,9 @@
+{
+  "brand": "jig/brand.fgdpengasih-web.css",
+  "surfaces": [
+    {
+      "match": "/",
+      "mode": "product"
+    }
+  ]
+}
