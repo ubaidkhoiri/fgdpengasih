@@ -91,7 +91,7 @@
 </section>
 <section class="section wrap"><div class="quote">“Usulan kecil yang realistis lebih bernilai daripada ide besar yang tidak jalan.”<small>Berani bersuara, taat arahan, dan pulang membawa aksi.</small></div></section>
 </main>
-<footer class="footer"><div class="wrap footer-inner"><span>Semalam Suntuk Sermo · Generus Muda Mudi Pengasih</span><span>Terbuka · Tertib · Menghargai · Berani menyampaikan keadaan daerah dengan jujur.</span></div></footer>
+<footer class="footer"><div class="wrap footer-inner"><span>Semalam Suntuk Sermo · Generus Muda Mudi Pengasih</span><span>Terbuka · Tertib · Menghargai · Berani menyampaikan keadaan dengan jujur.</span></div></footer>
 
 <svelte:head>
 <style>
