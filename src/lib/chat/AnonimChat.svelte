@@ -11,8 +11,9 @@
 		createdAt: string;
 		replyCount: number;
 		likedByMe: boolean;
+		mine: boolean;
+		isHidden?: boolean;
 		pending?: boolean;
-		isHidden: boolean;
 	};
 
 	type ApiBody = {
@@ -147,8 +148,8 @@
 			createdAt: new Date().toISOString(),
 			replyCount: 0,
 			likedByMe: false,
-			pending: true,
-			isHidden: false
+			mine: true,
+			pending: true
 		};
 		if (!parent) {
 			msgs = [tmp, ...msgs];
@@ -373,12 +374,10 @@
 	{:else}
 		<ul class="list">
 			{#each msgs as m (m.id)}
-				<li class="bubble" class:pending={m.pending} class:hidden={m.isHidden}>
+				<li class="bubble" class:mine={m.mine} class:pending={m.pending} class:hidden={m.isHidden}>
 					{#if m.isHidden}<span class="tag-hidden">tersembunyi</span>{/if}
-					<p class="body">{m.body}</p>
+					<p class="body">{m.body}<span class="time">{ago(m.createdAt)}{#if m.mine}{#if m.pending}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>{:else}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12.5 7 17l4.5-4.5M7.5 12.5 12 17l9.5-9.5"/></svg>{/if}{/if}</span></p>
 					<div class="meta">
-						<span>{ago(m.createdAt)}</span>
-						<span aria-hidden="true">·</span>
 						<button
 							type="button"
 							class="act"
@@ -404,12 +403,10 @@
 					{#if openThread === m.id}
 						<div class="thread">
 							{#each replies[m.id] ?? [] as r (r.id)}
-								<div class="bubble sub" class:pending={r.pending} class:hidden={r.isHidden}>
+								<div class="bubble sub" class:mine={r.mine} class:pending={r.pending} class:hidden={r.isHidden}>
 									{#if r.isHidden}<span class="tag-hidden">tersembunyi</span>{/if}
-									<p class="body">{r.body}</p>
+									<p class="body">{r.body}<span class="time">{ago(r.createdAt)}{#if r.mine}{#if r.pending}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>{:else}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12.5 7 17l4.5-4.5M7.5 12.5 12 17l9.5-9.5"/></svg>{/if}{/if}</span></p>
 									<div class="meta">
-										<span>{ago(r.createdAt)}</span>
-										<span aria-hidden="true">·</span>
 										<button
 											type="button"
 											class="act"
@@ -505,6 +502,7 @@
 		flex-direction: column;
 		height: 100%;
 		min-height: 0;
+		background: #efeae2;
 	}
 	.pin {
 		background: #fff8e6;
@@ -524,44 +522,64 @@
 	.list {
 		list-style: none;
 		margin: 0;
-		padding: 12px 16px;
+		padding: 12px;
 		overflow-y: auto;
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
+		gap: 6px;
 	}
 	.bubble {
 		background: #fff;
-		border: 1px solid var(--line);
-		border-radius: 14px;
-		padding: 5px 12px;
+		border-radius: 8px;
+		border-top-left-radius: 2px;
+		padding: 6px 8px 5px;
+		max-width: 82%;
+		align-self: flex-start;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+	}
+	.bubble.mine {
+		background: #d9fdd3;
+		align-self: flex-end;
+		border-top-left-radius: 8px;
+		border-top-right-radius: 2px;
 	}
 	.bubble.pending {
 		opacity: 0.6;
 	}
 	.body {
 		margin: 0;
-		font-size: 14.5px;
+		font-size: 14.2px;
 		line-height: 1.45;
 		overflow-wrap: anywhere;
+	}
+	.time {
+		float: right;
+		font-size: 11px;
+		line-height: 1;
+		color: #667781;
+		margin: 9px 0 0 8px;
+		display: inline-flex;
+		align-items: center;
+		gap: 3px;
+		white-space: nowrap;
 	}
 	.meta {
 		display: flex;
 		align-items: center;
-		gap: 6px;
-		margin-top: 1px;
-		font-size: 12.5px;
+		gap: 8px;
+		margin-top: 2px;
+		font-size: 11.5px;
 		line-height: 1.2;
-		color: var(--muted);
+		color: #8696a0;
 	}
 	.act {
 		background: none;
 		border: 0;
 		padding: 0 2px;
 		margin: 0;
-		color: var(--muted);
-		font-size: 12.5px;
+		color: #8696a0;
+		font-size: 11.5px;
 		line-height: 1.2;
 		font-weight: 700;
 		display: inline-flex;
@@ -569,21 +587,27 @@
 		gap: 4px;
 	}
 	.act.liked {
-		color: var(--green);
+		color: #00a884;
 	}
 	.act.danger {
 		font-weight: 600;
 	}
 	.thread {
-		margin-top: 8px;
-		padding-top: 8px;
-		border-top: 1px dashed var(--line);
+		margin-top: 6px;
+		padding-top: 6px;
+		border-top: 1px solid rgba(0, 0, 0, 0.12);
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: 6px;
 	}
 	.bubble.sub {
-		background: var(--mint);
+		background: #f0f2f5;
+		max-width: 100%;
+		align-self: stretch;
+		box-shadow: none;
+	}
+	.bubble.mine .bubble.sub {
+		background: #cdebc7;
 	}
 	.state {
 		text-align: center;
@@ -623,9 +647,9 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-		border-top: 1px solid var(--line);
-		background: #fff;
+		padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+		border-top: 0;
+		background: #f0f2f5;
 		flex: none;
 	}
 	.composer.sub {
@@ -635,14 +659,15 @@
 	}
 	.composer input {
 		flex: 1;
-		border: 1px solid var(--line);
-		border-radius: 99px;
+		border: 0;
+		border-radius: 20px;
 		padding: 9px 14px;
 		font-size: 14px;
 		min-width: 0;
+		background: #fff;
 	}
 	.composer input:focus {
-		outline: 2px solid var(--green);
+		outline: 2px solid #00a884;
 		outline-offset: -1px;
 	}
 	.count {
@@ -656,7 +681,7 @@
 		height: 40px;
 		border-radius: 50%;
 		border: 0;
-		background: var(--green);
+		background: #00a884;
 		color: #fff;
 		display: grid;
 		place-items: center;

@@ -52,6 +52,16 @@ export async function GET({ platform, params, request }) {
 		for (const r of lk) liked.add(r.messageId);
 	}
 	return json({
-		replies: rows.map((m) => ({ ...m, replyCount: 0, likedByMe: liked.has(m.id) }))
+		replies: rows.map((m) => ({
+			id: m.id,
+			parentId: m.parentId,
+			body: m.body,
+			likes: m.likes,
+			createdAt: m.createdAt,
+			isHidden: m.isHidden,
+			replyCount: 0,
+			likedByMe: liked.has(m.id),
+			mine: deviceKey !== '' && m.deviceKey === deviceKey
+		}))
 	});
 }

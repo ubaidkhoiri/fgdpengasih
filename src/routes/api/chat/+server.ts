@@ -58,9 +58,15 @@ export async function GET({ url, platform, request }) {
 	}
 	return json({
 		messages: page.map((m) => ({
-			...m,
+			id: m.id,
+			parentId: m.parentId,
+			body: m.body,
+			likes: m.likes,
+			createdAt: m.createdAt,
+			isHidden: m.isHidden,
 			replyCount: replyCounts[m.id] ?? 0,
-			likedByMe: liked.has(m.id)
+			likedByMe: liked.has(m.id),
+			mine: deviceKey !== '' && m.deviceKey === deviceKey
 		})),
 		hasMore: rows.length > limit,
 		nextCursor: page.length ? page[page.length - 1].createdAt.toISOString() : null
@@ -110,8 +116,21 @@ export async function POST({ request, platform }) {
 		.insert(chatMessages)
 		.values({ body, parentId, deviceKey })
 		.returning();
+	const row = inserted[0];
 	return json(
-		{ message: { ...inserted[0], replyCount: 0, likedByMe: false } },
+		{
+			message: {
+				id: row.id,
+				parentId: row.parentId,
+				body: row.body,
+				likes: row.likes,
+				createdAt: row.createdAt,
+				isHidden: row.isHidden,
+				replyCount: 0,
+				likedByMe: false,
+				mine: true
+			}
+		},
 		{ status: 201 }
 	);
 }
