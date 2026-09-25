@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import AnonimChat from '$lib/chat/AnonimChat.svelte';
 
 	let active = $state('top');
 	let scrolled = $state(false);
@@ -7,6 +8,10 @@
 	let fotoOpen = $state(false);
 	let fotoMounted = $state(false);
 	let fotoBye = $state(false);
+	let chatOpen = $state(false);
+	let chatMounted = $state(false);
+	let chatBye = $state(false);
+	let chatT = 0;
 	let byeT = 0;
 	let tallyDone = false;
 
@@ -53,8 +58,25 @@
 		}, 240);
 	}
 
+	function openChat() {
+		window.clearTimeout(chatT);
+		chatBye = false;
+		menuOpen = false;
+		chatMounted = true;
+		chatOpen = true;
+	}
+
+	function closeChat() {
+		if (!chatOpen || chatBye) return;
+		chatBye = true;
+		chatT = window.setTimeout(() => {
+			chatOpen = false;
+			chatBye = false;
+		}, 240);
+	}
+
 	$effect(() => {
-		const lock = fotoOpen ? 'hidden' : '';
+		const lock = fotoOpen || chatOpen ? 'hidden' : '';
 		document.body.style.overflow = lock;
 		document.documentElement.style.overflow = lock;
 		document.body.style.overscrollBehavior = lock ? 'none' : '';
@@ -80,7 +102,8 @@
 		};
 		const onKey = (e: KeyboardEvent) => {
 			if (e.key !== 'Escape') return;
-			if (fotoOpen) closeFoto();
+			if (chatOpen) closeChat();
+			else if (fotoOpen) closeFoto();
 			else if (menuOpen) menuOpen = false;
 		};
 		window.addEventListener('scroll', onScroll, { passive: true });
@@ -205,6 +228,7 @@
 {#if menuOpen}
 <div class="pop" role="menu">
 <button type="button" role="menuitem" onclick={openFoto}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8.5 7 10 4.5h4L15.5 7"/></svg>Kirim foto</button>
+<button type="button" role="menuitem" onclick={openChat}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z"/></svg>Anonim Chat</button>
 </div>
 {/if}
 </nav>
@@ -214,6 +238,15 @@
 <div class="sheet-head"><strong>Kirim foto</strong><button type="button" class="sheet-x" onclick={closeFoto} aria-label="Tutup"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
 <div class="sheet-body">
 {#if fotoMounted}<iframe data-tally-src="https://tally.so/embed/2E0ZO9?alignLeft=1&transparentBackground=1&dynamicHeight=1" src="https://tally.so/embed/2E0ZO9?alignLeft=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="420" frameborder="0" marginheight="0" marginwidth="0" title="Kirim foto"></iframe>{/if}
+</div>
+</div>
+{/if}
+{#if chatOpen}
+<div class="sheet-bg" class:bye={chatBye} onclick={closeChat} aria-hidden="true"></div>
+<div class="sheet tall" class:bye={chatBye} role="dialog" aria-modal="true" aria-label="Anonim Chat">
+<div class="sheet-head"><strong>Anonim Chat</strong><button type="button" class="sheet-x" onclick={closeChat} aria-label="Tutup"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+<div class="sheet-body">
+{#if chatMounted}<AnonimChat />{/if}
 </div>
 </div>
 {/if}
