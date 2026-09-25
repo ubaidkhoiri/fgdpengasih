@@ -535,30 +535,33 @@
 		background: #fff;
 		border: 1px solid var(--line);
 		border-radius: 14px;
-		padding: 10px 12px;
+		padding: 8px 12px;
 	}
 	.bubble.pending {
 		opacity: 0.6;
 	}
 	.body {
-		margin: 0 0 6px;
+		margin: 0 0 2px;
 		font-size: 14.5px;
-		line-height: 1.55;
+		line-height: 1.5;
 		overflow-wrap: anywhere;
 	}
 	.meta {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: 6px;
 		font-size: 12.5px;
+		line-height: 1.2;
 		color: var(--muted);
 	}
 	.act {
 		background: none;
 		border: 0;
-		padding: 2px 4px;
+		padding: 0 2px;
+		margin: 0;
 		color: var(--muted);
 		font-size: 12.5px;
+		line-height: 1.2;
 		font-weight: 700;
 		display: inline-flex;
 		align-items: center;
