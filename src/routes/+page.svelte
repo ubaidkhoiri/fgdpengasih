@@ -86,8 +86,8 @@
 <div class="ftable-wrap"><table class="ftable">
 <thead><tr><th>Masalah</th><th>Solusi</th><th>Action</th></tr></thead>
 <tbody>
-<tr><td rowspan="2"><p>01. Generus belum bisa mempersungguh di dalam acara amrin jami. Penyebabnya kurang bisa mengatur waktu karna sibuk bekerja, sering bermain hp, dan terkadang materi dalam pengajian belum kreatif.</p></td><td><p>01. Membuat acara pengajian "home visit" (pengajian di rumah-rumah jamaah).</p></td><td><p>01. Pengajian Home Visit - mubaligh yang kreatif, nasehat motivasi dan mabar (makan bareng). Peserta: generus usia pra remaja dan remaja. Waktu: setiap bulan 1 kali. Dana: dari ppg 200 ribu dan shodaqah pemilik rumah yang siap.</p></td></tr>
-<tr><td><p>02. Membuat acara family gathering yang melibatkan orang tua dan anak.</p></td><td><p>02. Family Gathering - peserta ortu dan anak, sebulan sekali, dana keluarga masing-masing.</p></td></tr>
+<tr><td rowspan="2"><p>Generus belum bisa mempersungguh di dalam acara amrin jami. Penyebabnya kurang bisa mengatur waktu karna sibuk bekerja, sering bermain hp, dan terkadang materi dalam pengajian belum kreatif.</p></td><td><p>Membuat acara pengajian "home visit" (pengajian di rumah-rumah jamaah).</p></td><td><p>Pengajian Home Visit - mubaligh yang kreatif, nasehat motivasi dan mabar (makan bareng). Peserta: generus usia pra remaja dan remaja. Waktu: setiap bulan 1 kali. Dana: dari ppg 200 ribu dan shodaqah pemilik rumah yang siap.</p></td></tr>
+<tr><td><p>Membuat acara family gathering yang melibatkan orang tua dan anak.</p></td><td><p>Family Gathering - peserta ortu dan anak, sebulan sekali, dana keluarga masing-masing.</p></td></tr>
 </tbody>
 </table></div>
 </div>
@@ -96,8 +96,8 @@
 <div class="ftable-wrap"><table class="ftable">
 <thead><tr><th>Masalah</th><th>Solusi</th><th>Action</th></tr></thead>
 <tbody>
-<tr><td rowspan="2"><p>01. Usia mandiri yang tidak semangat dalam mengikuti pengajian.</p></td><td><p>01. Menggabungkan 2 kelompok atau lebih di acara pengajian.</p></td><td><p>01. Ngaji Irisan - mengadakan ngaji mm gabungan 2 kelompok dan acara keakraban seru. Dana dari masing-masing kelompok.</p></td></tr>
-<tr><td><p>02. Memisah usia remaja dan mandiri menjadi waktu beda.</p></td><td><p>02. Remaja ngaji magrib, usia mandiri ngaji isya. Atau lokasi berbeda.</p></td></tr>
+<tr><td rowspan="2"><p>Usia mandiri yang tidak semangat dalam mengikuti pengajian.</p></td><td><p>Menggabungkan 2 kelompok atau lebih di acara pengajian.</p></td><td><p>Ngaji Irisan - mengadakan ngaji mm gabungan 2 kelompok dan acara keakraban seru. Dana dari masing-masing kelompok.</p></td></tr>
+<tr><td><p>Memisah usia remaja dan mandiri menjadi waktu beda.</p></td><td><p>Remaja ngaji magrib, usia mandiri ngaji isya. Atau lokasi berbeda.</p></td></tr>
 </tbody>
 </table></div>
 </div>
@@ -106,7 +106,7 @@
 <div class="ftable-wrap"><table class="ftable">
 <thead><tr><th>Masalah</th><th>Solusi</th><th>Action</th></tr></thead>
 <tbody>
-<tr><td><p>01. Dijumpai banyak generus usman berpacaran dengan orang luar.</p></td><td><p>01. Diadakan pengajian yang variatif dan kegiatan yang menarik untuk usman.</p></td><td><p>01. Lebih santai terkait sitir karna tujuannya untuk saling mengenal. Dijumpai ada pasangan berjodoh dengan satu kelompoknya tapi sama sekali belum kenal sebelum itu. Dan lebih banyak mengemas acara keakraban kekinian tapi tetap jaga batasan.</p></td></tr>
+<tr><td><p>Dijumpai banyak generus usman berpacaran dengan orang luar.</p></td><td><p>Diadakan pengajian yang variatif dan kegiatan yang menarik untuk usman.</p></td><td><p>Lebih santai terkait sitir karna tujuannya untuk saling mengenal. Dijumpai ada pasangan berjodoh dengan satu kelompoknya tapi sama sekali belum kenal sebelum itu. Dan lebih banyak mengemas acara keakraban kekinian tapi tetap jaga batasan.</p></td></tr>
 </tbody>
 </table></div>
 </div>
