@@ -69,6 +69,9 @@
 		overflow-y: auto;
 		scrollbar-width: none;
 		padding: var(--spacing-2xs) var(--spacing-card) var(--spacing-m);
+		color-scheme: light;
+		background: var(--color-bg-base);
+		color: var(--color-text-strong);
 	}
 	.rd::-webkit-scrollbar {
 		display: none;
