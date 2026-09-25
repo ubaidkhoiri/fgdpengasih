@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 
 	let active = $state('top');
 	let scrolled = $state(false);
@@ -33,12 +33,11 @@
 		document.body.appendChild(s);
 	}
 
-	async function openFoto() {
+	function openFoto() {
 		menuOpen = false;
 		fotoMounted = true;
 		fotoOpen = true;
-		await tick();
-		loadTally();
+		requestAnimationFrame(() => loadTally());
 	}
 
 	function closeFoto() {
