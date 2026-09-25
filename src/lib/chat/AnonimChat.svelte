@@ -535,21 +535,22 @@
 		background: #fff;
 		border: 1px solid var(--line);
 		border-radius: 14px;
-		padding: 8px 12px;
+		padding: 5px 12px;
 	}
 	.bubble.pending {
 		opacity: 0.6;
 	}
 	.body {
-		margin: 0 0 2px;
+		margin: 0;
 		font-size: 14.5px;
-		line-height: 1.5;
+		line-height: 1.45;
 		overflow-wrap: anywhere;
 	}
 	.meta {
 		display: flex;
 		align-items: center;
 		gap: 6px;
+		margin-top: 1px;
 		font-size: 12.5px;
 		line-height: 1.2;
 		color: var(--muted);
