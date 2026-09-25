@@ -486,7 +486,6 @@
 		<ul class="list">
 			{#each visible as m (m.id)}
 				<li class="bubble" class:mine={m.mine} class:pending={m.pending} class:hidden={m.isHidden}>
-					{#if m.isHidden}<span class="tag-hidden">tersembunyi</span>{/if}
 					<p class="body">{m.body}<span class="time">{ago(m.createdAt)}{#if m.mine}{#if m.pending}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>{:else}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12.5 7 17l4.5-4.5M7.5 12.5 12 17l9.5-9.5"/></svg>{/if}{/if}</span></p>
 					<div class="meta">
 						<button
@@ -515,7 +514,6 @@
 						<div class="thread">
 							{#each replies[m.id] ?? [] as r (r.id)}
 								<div class="bubble sub" class:mine={r.mine} class:pending={r.pending} class:hidden={r.isHidden}>
-									{#if r.isHidden}<span class="tag-hidden">tersembunyi</span>{/if}
 									<p class="body">{r.body}<span class="time">{ago(r.createdAt)}{#if r.mine}{#if r.pending}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>{:else}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12.5 7 17l4.5-4.5M7.5 12.5 12 17l9.5-9.5"/></svg>{/if}{/if}</span></p>
 									<div class="meta">
 										<button
@@ -894,19 +892,6 @@
 		padding: 4px 12px;
 	}
 	.bubble.hidden {
-		border-style: dashed;
-		opacity: 0.75;
-	}
-	.tag-hidden {
-		display: inline-block;
-		font-size: 11px;
-		font-weight: 800;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-		color: #8f1d1d;
-		background: #fdecec;
-		border-radius: 99px;
-		padding: 2px 10px;
-		margin-bottom: 6px;
+		opacity: 0.35;
 	}
 </style>
