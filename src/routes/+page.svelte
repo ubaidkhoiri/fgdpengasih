@@ -30,11 +30,11 @@
 <section class="section wrap" id="alur">
 <div class="section-head"><div><div class="kicker">01 / Jalannya diskusi</div><h2>Alur FGD, langkah demi langkah</h2><p class="sub">Ikuti urutan agar diskusi tidak melebar tanpa hasil.</p></div></div>
 <div class="steps">
-<article class="panel step"><div class="step-num">01</div><h3>Kumpul per kelompok</h3><p>Peserta Generus Muda Mudi Pengasih bergabung sesuai kelompok dan menyiapkan pengalaman serta persoalan yang dirasakan.</p><small>Semua peserta · Pembukaan</small></article>
-<article class="panel step"><div class="step-num">02</div><h3>Briefing perwakilan</h3><p>Fasilitator menjelaskan tujuan, aturan, waktu, dan alur. Tentukan perwakilan yang memandu serta notulen.</p><small>Fasilitator · Pembagian peran</small></article>
-<article class="panel step"><div class="step-num">03</div><h3>Diskusi dipandu</h3><p>Perwakilan memandu curah pengalaman, mengelompokkan masalah, memilih prioritas, dan menggali penyebab.</p><small>Perwakilan · Seluruh peserta</small></article>
-<article class="panel step"><div class="step-num">04</div><h3>Catat & sepakati</h3><p>Notulen mencatat masalah, solusi, dan action plan/program. Kelompok menyepakati rumusan serta langkah tindak lanjut.</p><small>Notulen · Validasi kelompok</small></article>
-<article class="panel step"><div class="step-num">05</div><h3>Presentasi 2 orang</h3><p>Dua orang perwakilan menyampaikan ringkasan hasil diskusi kelompok: masalah utama, solusi, dan rencana program.</p><small>2 presenter · Pleno</small></article>
+<article class="panel step"><div class="step-num">01</div><h3>Briefing Ketua</h3><p>Pemandu menjelaskan tujuan, aturan, waktu, dan tata cara FGD.</p><small>Pemandu</small></article>
+<article class="panel step"><div class="step-num">02</div><h3>Kumpul Kelompok</h3><p>Generus Muda Mudi Pengasih kumpul sesuai kelompok dan siapkan persoalan yang dirasakan.</p><small>Semua Peserta</small></article>
+<article class="panel step"><div class="step-num">03</div><h3>Diskusi</h3><p>Perwakilan memandu jalannya FGD, mengelompokkan masalah, cari solusi, aksi nyata serta prioritas.</p><small>Seluruh Peserta</small></article>
+<article class="panel step"><div class="step-num">04</div><h3>Catat & Sepakati</h3><p>Notulen mencatat masalah, solusi, dan action plan/program sesuai form. Dan menyepakati rumusan serta langkah tindak lanjut.</p><small>Notulen</small></article>
+<article class="panel step"><div class="step-num">05</div><h3>Presentasi 2 orang</h3><p>Dua orang perwakilan menyampaikan ringkasan hasil diskusi kelompok: masalah utama, solusi, dan rencana program.</p><small>2 Generus</small></article>
 </div>
 <div class="flow" aria-label="Urutan proses diskusi"><span>Buka tujuan</span><b>→</b><span>Curah pengalaman</span><b>→</b><span>Kelompokkan masalah</span><b>→</b><span>Pilih prioritas</span><b>→</b><span>Gali penyebab</span><b>→</b><span>Susun aksi</span><b>→</b><span>Sepakati PIC</span><b>→</b><span>Validasi hasil</span></div>
 <div class="callout"><b>Catatan penting:</b> tidak semua masalah harus diselesaikan sekaligus. Pilih yang paling mendesak dan paling mungkin dikerjakan.</div>
