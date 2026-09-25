@@ -4,5 +4,5 @@
 
 /* The token layer for one surface, in one import.
    Brand declares the options; the mode selects from them. */
-@import "./brand.fgdpengasih-web.css";
+@import "./brand.fgdpengasih.css";
 @import "./mode.product.css";

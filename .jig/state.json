@@ -4,9 +4,9 @@
     "product"
   ],
   "files": {
-    "jig/brand.fgdpengasih-web.css": "sha256:9d65ec5999dc190de40c9bfe51d043699dd3d6153fd469efd79d5942eba6d487",
-    "jig.config.json": "sha256:a6c3241fde4443cc7f30672f922dd3543a1aecfbc45992218ef0a3b3dd6b0e39",
+    "jig/brand.fgdpengasih.css": "sha256:eede3854ba49b1455160714d57a21f7e658af1a8e15fe1fd3beff0d72f725c0b",
+    "jig.config.json": "sha256:c3880c6b8d241fd384f87b1e8f0ad3caaa8b78ea8aee11d261a94a49c95d914b",
     "jig/mode.product.css": "sha256:c033f891a71376425a14e22fb955e66d33af5b0bce72626f7dac9c8ed8db61fd",
-    "jig/theme.css": "sha256:3f26383802999ed2366fada142e285c0f76595deca47122b29ee2edd6b4f8613"
+    "jig/theme.css": "sha256:8f179b4344f4ce52f47e75e386296102a3f44fc21890519109e233100ea94c34"
   }
 }
