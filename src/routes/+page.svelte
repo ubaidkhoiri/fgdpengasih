@@ -26,10 +26,6 @@
 <div class="eyebrow">Panduan peserta · Semalam Suntuk Sermo</div>
 <h1>Dari Generus Untuk Generus,<br><em>Hadirmu Seramu</em></h1>
 <p class="lead">Panduan diskusi kelompok Generus Muda Mudi Pengasih untuk mengurai kebutuhan kegiatan, memilih solusi yang sesuai, dan menyepakati langkah yang bisa dijalankan bersama.</p>
-<div class="hero-grid">
-<div class="hero-note"><strong>Semalam Suntuk Sermo · FGD per kelompok</strong><p>Teman-teman berkumpul, berbagi pengalaman, dan merumuskan kegiatan yang lebih relate, nyaman, serta bermanfaat bagi Generus.</p></div>
-<div class="statbox"><b>01 → 03</b><span>Dengar pengalaman. Pilih ide. Presentasikan hasil bersama.</span></div>
-</div>
 </section>
 <section class="section wrap" id="alur">
 <div class="section-head"><div><div class="kicker">01 / Jalannya diskusi</div><h2>Alur FGD, langkah demi langkah</h2><p class="sub">Ikuti urutan agar diskusi tidak melebar tanpa hasil.</p></div></div>
