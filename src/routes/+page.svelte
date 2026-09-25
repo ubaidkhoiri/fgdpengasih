@@ -23,9 +23,9 @@
 <header class="topbar"><div class="wrap nav"><div class="brand">SEMALAM <span>SUNTUK SERMO</span></div><nav class="navlinks" aria-label="Navigasi utama"><a href="#alur">Alur FGD</a><a href="#peran">Peran</a><a href="#lembar">Lembar hasil</a><a href="#cek">Checklist</a></nav></div></header>
 <main>
 <section class="hero wrap">
-<div class="eyebrow">Panduan peserta · Semalam Suntuk Sermo</div>
-<h1>Dari Generus Untuk Generus,<br><em>Hadirmu Seramu</em></h1>
-<p class="lead">Panduan diskusi kelompok Generus Muda Mudi Pengasih untuk mengurai kebutuhan kegiatan, memilih solusi yang sesuai, dan menyepakati langkah yang bisa dijalankan bersama.</p>
+<div class="eyebrow">Panduan Peserta FGD Kelompok</div>
+<h1>Dari Generus<br><em>Untuk Generus</em></h1>
+<p class="lead">Menindaklanjuti hasil terobosan mm pusat kemarin yaitu seputar kelancaran generus dengan berdiskusi dan mencari solusi dari generus untuk generus. Pengurus mm desa pengasih memfasilitasi diskusi per kelompok dibarengi keakraban semalam suntuk sermo ini, dengan santai, curhat, usul, sharing dan cari solusi bersama.</p>
 </section>
 <section class="section wrap" id="alur">
 <div class="section-head"><div><div class="kicker">01 / Jalannya diskusi</div><h2>Alur FGD, langkah demi langkah</h2><p class="sub">Ikuti urutan agar diskusi tidak melebar tanpa hasil.</p></div></div>
