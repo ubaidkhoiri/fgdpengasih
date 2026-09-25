@@ -199,7 +199,7 @@
 <div class="sheet" role="dialog" aria-modal="true" aria-label="Kirim foto">
 <div class="sheet-head"><strong>Kirim foto</strong><button type="button" class="sheet-x" onclick={closeFoto} aria-label="Tutup"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
 <div class="sheet-body">
-{#if fotoMounted}<iframe data-tally-src="https://tally.so/embed/2E0ZO9?alignLeft=1&transparentBackground=1&dynamicHeight=1" src="https://tally.so/embed/2E0ZO9?alignLeft=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="400" frameborder="0" marginheight="0" marginwidth="0" title="Kirim foto"></iframe>{/if}
+{#if fotoMounted}<iframe data-tally-src="https://tally.so/embed/2E0ZO9?alignLeft=1&transparentBackground=1&dynamicHeight=1" src="https://tally.so/embed/2E0ZO9?alignLeft=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="420" frameborder="0" marginheight="0" marginwidth="0" title="Kirim foto"></iframe>{/if}
 </div>
 </div>
 {/if}
