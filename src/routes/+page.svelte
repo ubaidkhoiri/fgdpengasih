@@ -54,7 +54,10 @@
 	}
 
 	$effect(() => {
-		document.body.style.overflow = fotoOpen ? 'hidden' : '';
+		const lock = fotoOpen ? 'hidden' : '';
+		document.body.style.overflow = lock;
+		document.documentElement.style.overflow = lock;
+		document.body.style.overscrollBehavior = lock ? 'none' : '';
 	});
 
 	onMount(() => {
