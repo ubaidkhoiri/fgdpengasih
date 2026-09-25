@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import { and, desc, eq, inArray, isNull, lt, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, inArray, isNull, lt, sql } from 'drizzle-orm';
 import { getDb } from '$lib/server/db/client';
 import { hitLimit } from '$lib/server/db/ratelimit';
 import { containsProfanity } from '$lib/server/db/profanity';
@@ -19,6 +19,7 @@ export async function GET({ url, platform, request }) {
 	}
 	const limit = Math.min(Math.max(Number(url.searchParams.get('limit') ?? 30), 1), 50);
 	const cursorRaw = url.searchParams.get('cursor');
+	const sinceRaw = url.searchParams.get('since');
 	const deviceKey = request.headers.get('x-device-key') ?? '';
 	const isAdmin = await verifyAdminToken(
 		request.headers.get('x-admin-token') ?? '',
@@ -30,6 +31,10 @@ export async function GET({ url, platform, request }) {
 	if (cursorRaw) {
 		const d = new Date(cursorRaw);
 		if (!isNaN(d.getTime())) conds.push(lt(chatMessages.createdAt, d));
+	}
+	if (sinceRaw) {
+		const d = new Date(sinceRaw);
+		if (!isNaN(d.getTime())) conds.push(gt(chatMessages.createdAt, d));
 	}
 	const rows = await db
 		.select()

@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm';
+import { and, eq, lt } from 'drizzle-orm';
 import { rateWindows } from './schema';
 import type { Db } from './client';
 
@@ -10,6 +10,9 @@ export async function hitLimit(
 	windowSec: number
 ): Promise<{ ok: boolean; remaining: number }> {
 	const now = new Date();
+	await db
+		.delete(rateWindows)
+		.where(lt(rateWindows.windowStart, new Date(now.getTime() - 86400 * 1000)));
 	const rows = await db
 		.select()
 		.from(rateWindows)

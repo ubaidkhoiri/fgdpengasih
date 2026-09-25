@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let { adminUnlock = false }: { adminUnlock?: boolean } = $props();
+	let {
+		adminUnlock = false,
+		open = true,
+		refreshTick = 0
+	}: { adminUnlock?: boolean; open?: boolean; refreshTick?: number } = $props();
 
 	type Msg = {
 		id: string;
@@ -36,6 +40,7 @@
 	const DRAFT_LS = 'fgd-chat-draft';
 	const ADMIN_LS = 'fgd-chat-admin';
 	const POLL_MS = 5000;
+	const IDLE_MS = 15000;
 
 	let msgs: Msg[] = $state([]);
 	let replies: Record<string, Msg[]> = $state({});
@@ -52,6 +57,25 @@
 	let nextCursor: string | null = $state(null);
 	let dbDown = $state(false);
 	let pollT = 0;
+	let streak = 0;
+
+	function latestStamp() {
+		const first = msgs.find((m) => !m.id.startsWith('tmp-'));
+		return first ? first.createdAt : new Date(0).toISOString();
+	}
+
+	function schedule() {
+		window.clearTimeout(pollT);
+		pollT = window.setTimeout(tick, streak >= 3 ? IDLE_MS : POLL_MS);
+	}
+
+	async function tick() {
+		if (open && !document.hidden) {
+			const added = await poll();
+			streak = added ? 0 : streak + 1;
+		}
+		if (open) schedule();
+	}
 	let isAdmin = $state(false);
 	let adminToken = $state('');
 	let adminCode = $state('');
@@ -100,20 +124,22 @@
 		}
 	}
 
-	async function poll() {
-		if (document.hidden) return;
+	async function poll(): Promise<number> {
 		try {
-			const r = await fetch('/api/chat?limit=30');
-			if (!r.ok) return;
+			const r = await fetch(`/api/chat?limit=10&since=${encodeURIComponent(latestStamp())}`, {
+				headers: hdrs()
+			});
+			if (!r.ok) return 0;
 			const j: ApiBody = await r.json();
 			const fresh: Msg[] = j.messages ?? [];
 			const known = new Set(msgs.map((m) => m.id));
 			const freshById = new Map(fresh.map((m) => [m.id, m]));
 			const added = fresh.filter((m) => !known.has(m.id));
-			if (!added.length && !fresh.length) return;
+			if (!added.length && !fresh.length) return 0;
 			msgs = [...added, ...msgs.map((m) => freshById.get(m.id) ?? m)].slice(0, 100);
+			return added.length;
 		} catch {
-			/* diam, coba lagi interval berikut */
+			return 0;
 		}
 	}
 
@@ -140,6 +166,7 @@
 		if (!body || sending) return;
 		err = '';
 		notice = '';
+		streak = 0;
 		const tmp: Msg = {
 			id: `tmp-${Math.random().toString(36).slice(2)}`,
 			parentId: parent,
@@ -314,8 +341,24 @@
 			/* abaikan */
 		}
 		load(true);
-		pollT = window.setInterval(poll, POLL_MS);
-		return () => window.clearInterval(pollT);
+		streak = 0;
+		if (open) schedule();
+		return () => window.clearTimeout(pollT);
+	});
+
+	$effect(() => {
+		if (open) {
+			streak = 0;
+			schedule();
+		} else window.clearTimeout(pollT);
+	});
+
+	$effect(() => {
+		if (refreshTick > 0) {
+			streak = 0;
+			load(false);
+			if (open) schedule();
+		}
 	});
 
 	$effect(() => {
