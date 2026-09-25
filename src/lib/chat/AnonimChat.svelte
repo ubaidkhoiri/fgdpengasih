@@ -570,7 +570,7 @@
 		gap: 8px;
 		margin-top: 6px;
 		font-size: 11px;
-		line-height: 1.2;
+		line-height: 1;
 		color: #8696a0;
 	}
 	.act {
@@ -580,7 +580,7 @@
 		margin: 0;
 		color: #8696a0;
 		font-size: 11px;
-		line-height: 1.2;
+		line-height: 1;
 		font-weight: 700;
 		display: inline-flex;
 		align-items: center;
