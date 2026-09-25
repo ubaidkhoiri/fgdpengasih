@@ -40,3 +40,13 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+## Deploy
+
+`.github/workflows/deploy.yml` deploys on every push to `main`. For it to work:
+
+1. Push this repo to GitHub.
+2. Create a Cloudflare API token with Workers permissions (edit templates: "Edit Cloudflare Workers").
+3. In GitHub repo Settings → Secrets and variables → Actions, add:
+   - `CLOUDFLARE_API_TOKEN` — the API token
+   - `CLOUDFLARE_ACCOUNT_ID` — your Cloudflare account ID
