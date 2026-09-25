@@ -25,7 +25,7 @@
 <section class="hero wrap">
 <div class="eyebrow">Panduan Peserta FGD Kelompok</div>
 <h1>Dari Generus<br><em>Untuk Generus</em></h1>
-<p class="lead">Menindaklanjuti hasil terobosan mm pusat kemarin yaitu seputar kelancaran generus dengan berdiskusi dan mencari solusi dari generus untuk generus. Pengurus mm desa pengasih memfasilitasi diskusi per kelompok dibarengi keakraban semalam suntuk sermo ini, dengan santai, curhat, usul, sharing dan cari solusi bersama.</p>
+<p class="lead">Tindak lanjut terobosan mm yaitu seputar kelancaran generus dengan berdiskusi dan mencari solusi dari generus untuk generus. Pengurus mm pengasih memfasilitasi diskusi per kelompok dibarengi keakraban semalam suntuk sermo ini, dengan santai, curhat, usul, sharing dan cari solusi bersama.</p>
 </section>
 <section class="section wrap" id="alur">
 <div class="section-head"><div><div class="kicker">01 / Jalannya diskusi</div><h2>Alur FGD, langkah demi langkah</h2><p class="sub">Ikuti urutan agar diskusi tidak melebar tanpa hasil.</p></div></div>
