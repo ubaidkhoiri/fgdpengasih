@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { and, asc, eq, inArray } from 'drizzle-orm';
 import { getDb } from '$lib/server/db/client';
+import { getAdminCode, verifyAdminToken } from '$lib/server/db/admin';
 import { chatLikes, chatMessages } from '$lib/server/db/schema';
 
 export async function GET({ platform, params, request }) {
@@ -14,15 +15,23 @@ export async function GET({ platform, params, request }) {
 		);
 	}
 	const id = params.id;
+	const isAdmin = await verifyAdminToken(
+		request.headers.get('x-admin-token') ?? '',
+		getAdminCode(platform)
+	);
 	const parent = await db
 		.select({ id: chatMessages.id })
 		.from(chatMessages)
-		.where(and(eq(chatMessages.id, id), eq(chatMessages.isHidden, false)));
+		.where(isAdmin ? eq(chatMessages.id, id) : and(eq(chatMessages.id, id), eq(chatMessages.isHidden, false)));
 	if (!parent.length) return json({ error: 'pesan tidak ada' }, { status: 404 });
 	const rows = await db
 		.select()
 		.from(chatMessages)
-		.where(and(eq(chatMessages.parentId, id), eq(chatMessages.isHidden, false)))
+		.where(
+			isAdmin
+				? eq(chatMessages.parentId, id)
+				: and(eq(chatMessages.parentId, id), eq(chatMessages.isHidden, false))
+		)
 		.orderBy(asc(chatMessages.createdAt))
 		.limit(20);
 	const deviceKey = request.headers.get('x-device-key') ?? '';

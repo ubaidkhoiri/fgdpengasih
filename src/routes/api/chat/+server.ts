@@ -3,6 +3,7 @@ import { and, desc, eq, inArray, isNull, lt, sql } from 'drizzle-orm';
 import { getDb } from '$lib/server/db/client';
 import { hitLimit } from '$lib/server/db/ratelimit';
 import { containsProfanity } from '$lib/server/db/profanity';
+import { getAdminCode, verifyAdminToken } from '$lib/server/db/admin';
 import { chatLikes, chatMessages } from '$lib/server/db/schema';
 
 function noDb(e: unknown) {
@@ -19,7 +20,13 @@ export async function GET({ url, platform, request }) {
 	const limit = Math.min(Math.max(Number(url.searchParams.get('limit') ?? 30), 1), 50);
 	const cursorRaw = url.searchParams.get('cursor');
 	const deviceKey = request.headers.get('x-device-key') ?? '';
-	const conds = [eq(chatMessages.isHidden, false), isNull(chatMessages.parentId)];
+	const isAdmin = await verifyAdminToken(
+		request.headers.get('x-admin-token') ?? '',
+		getAdminCode(platform)
+	);
+	const conds = isAdmin
+		? [isNull(chatMessages.parentId)]
+		: [eq(chatMessages.isHidden, false), isNull(chatMessages.parentId)];
 	if (cursorRaw) {
 		const d = new Date(cursorRaw);
 		if (!isNaN(d.getTime())) conds.push(lt(chatMessages.createdAt, d));

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	let { adminUnlock = false }: { adminUnlock?: boolean } = $props();
+
 	type Msg = {
 		id: string;
 		parentId: string | null;
@@ -10,6 +12,7 @@
 		replyCount: number;
 		likedByMe: boolean;
 		pending?: boolean;
+		isHidden: boolean;
 	};
 
 	type ApiBody = {
@@ -23,10 +26,14 @@
 		likes?: number;
 		reported?: boolean;
 		hidden?: boolean;
+		id?: string;
+		token?: string;
+		expiresAt?: number;
 	};
 
 	const DEVICE_LS = 'fgd-chat-device';
 	const DRAFT_LS = 'fgd-chat-draft';
+	const ADMIN_LS = 'fgd-chat-admin';
 	const POLL_MS = 5000;
 
 	let msgs: Msg[] = $state([]);
@@ -44,9 +51,18 @@
 	let nextCursor: string | null = $state(null);
 	let dbDown = $state(false);
 	let pollT = 0;
+	let isAdmin = $state(false);
+	let adminToken = $state('');
+	let adminCode = $state('');
+	let adminErr = $state('');
 
 	function hdrs() {
-		return { 'content-type': 'application/json', 'x-device-key': deviceKey };
+		const h: Record<string, string> = {
+			'content-type': 'application/json',
+			'x-device-key': deviceKey
+		};
+		if (adminToken) h['x-admin-token'] = adminToken;
+		return h;
 	}
 
 	function ago(iso: string) {
@@ -131,7 +147,8 @@
 			createdAt: new Date().toISOString(),
 			replyCount: 0,
 			likedByMe: false,
-			pending: true
+			pending: true,
+			isHidden: false
 		};
 		if (!parent) {
 			msgs = [tmp, ...msgs];
@@ -215,6 +232,60 @@
 		} else notice = 'laporan dicatat, terima kasih sudah menjaga';
 	}
 
+	async function adminLogin() {
+		const code = adminCode.trim();
+		if (!code) return;
+		adminErr = '';
+		try {
+			const r = await fetch('/api/chat/admin/login', {
+				method: 'POST',
+				headers: hdrs(),
+				body: JSON.stringify({ code })
+			});
+			const j: ApiBody = await r.json();
+			if (!r.ok) throw new Error(j.error ?? 'gagal masuk');
+			if (!j.token) throw new Error('respon server aneh');
+			adminToken = j.token;
+			isAdmin = true;
+			adminCode = '';
+			try {
+				sessionStorage.setItem(ADMIN_LS, adminToken);
+			} catch {
+				/* abaikan */
+			}
+			load(true);
+		} catch (e) {
+			adminErr = e instanceof Error ? e.message : 'gagal masuk';
+		}
+	}
+
+	function adminLogout() {
+		adminToken = '';
+		isAdmin = false;
+		try {
+			sessionStorage.removeItem(ADMIN_LS);
+		} catch {
+			/* abaikan */
+		}
+		load(true);
+	}
+
+	async function toggleHide(m: Msg) {
+		if (m.pending || m.id.startsWith('tmp-')) return;
+		try {
+			const r = await fetch(`/api/chat/${m.id}/hide`, {
+				method: 'POST',
+				headers: hdrs(),
+				body: JSON.stringify({ hidden: !m.isHidden })
+			});
+			const j: ApiBody = await r.json();
+			if (!r.ok) throw new Error(j.error ?? 'gagal menyembunyikan');
+			patchMsg(m.id, { isHidden: j.hidden ?? !m.isHidden });
+		} catch (e) {
+			err = e instanceof Error ? e.message : 'gagal menyembunyikan';
+		}
+	}
+
 	onMount(() => {
 		let dk = '';
 		try {
@@ -231,6 +302,16 @@
 			dk = `d-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 		}
 		deviceKey = dk;
+		try {
+			const t = sessionStorage.getItem(ADMIN_LS) ?? '';
+			const exp = Number(t.split('.')[0]);
+			if (t && Number.isFinite(exp) && exp * 1000 > Date.now()) {
+				adminToken = t;
+				isAdmin = true;
+			} else if (t) sessionStorage.removeItem(ADMIN_LS);
+		} catch {
+			/* abaikan */
+		}
 		load(true);
 		pollT = window.setInterval(poll, POLL_MS);
 		return () => window.clearInterval(pollT);
@@ -250,6 +331,36 @@
 		<strong>Perhatian, ruang anonim bersama.</strong>
 		Jaga bahasa, dilarang menyakiti atau merendahkan siapa pun. Pesan yang dilaporkan 5 orang otomatis disembunyikan.
 	</div>
+	{#if adminUnlock && !isAdmin}
+		<form
+			class="adminbox"
+			onsubmit={(e) => {
+				e.preventDefault();
+				adminLogin();
+			}}
+		>
+			<input
+				type="password"
+				placeholder="Kode admin…"
+				maxlength="64"
+				autocomplete="off"
+				bind:value={adminCode}
+				aria-label="Kode admin"
+			/>
+			<button type="submit" disabled={!adminCode.trim()} aria-label="Masuk sebagai admin">
+				Masuk
+			</button>
+		</form>
+		{#if adminErr}
+			<p class="err" role="alert">{adminErr}</p>
+		{/if}
+	{/if}
+	{#if isAdmin}
+		<div class="adminbar">
+			<span>Mode admin aktif</span>
+			<button type="button" onclick={adminLogout}>Keluar</button>
+		</div>
+	{/if}
 	{#if dbDown}
 		<div class="dbwarn">
 			Database chat belum tersambung. Tempel DATABASE_URL Neon ke file .env lalu jalankan migrasi.
@@ -262,7 +373,8 @@
 	{:else}
 		<ul class="list">
 			{#each msgs as m (m.id)}
-				<li class="bubble" class:pending={m.pending}>
+				<li class="bubble" class:pending={m.pending} class:hidden={m.isHidden}>
+					{#if m.isHidden}<span class="tag-hidden">tersembunyi</span>{/if}
 					<p class="body">{m.body}</p>
 					<div class="meta">
 						<span>{ago(m.createdAt)}</span>
@@ -283,11 +395,17 @@
 						<button type="button" class="act danger" onclick={() => report(m)} aria-label="Laporkan">
 							Lapor
 						</button>
+						{#if isAdmin}
+							<button type="button" class="act danger" onclick={() => toggleHide(m)}>
+								{m.isHidden ? 'Tampilkan' : 'Sembunyikan'}
+							</button>
+						{/if}
 					</div>
 					{#if openThread === m.id}
 						<div class="thread">
 							{#each replies[m.id] ?? [] as r (r.id)}
-								<div class="bubble sub" class:pending={r.pending}>
+								<div class="bubble sub" class:pending={r.pending} class:hidden={r.isHidden}>
+									{#if r.isHidden}<span class="tag-hidden">tersembunyi</span>{/if}
 									<p class="body">{r.body}</p>
 									<div class="meta">
 										<span>{ago(r.createdAt)}</span>
@@ -305,6 +423,11 @@
 										<button type="button" class="act danger" onclick={() => report(r)} aria-label="Laporkan">
 											Lapor
 										</button>
+										{#if isAdmin}
+											<button type="button" class="act danger" onclick={() => toggleHide(r)}>
+												{r.isHidden ? 'Tampilkan' : 'Sembunyikan'}
+											</button>
+										{/if}
 									</div>
 								</div>
 							{:else}
@@ -536,5 +659,64 @@
 	}
 	.composer button[type='submit']:disabled {
 		opacity: 0.4;
+	}
+	.adminbox {
+		display: flex;
+		gap: 8px;
+		padding: 10px 16px;
+		background: #f4f4f2;
+		border-bottom: 1px solid var(--line);
+	}
+	.adminbox input {
+		flex: 1;
+		border: 1px solid var(--line);
+		border-radius: 99px;
+		padding: 8px 14px;
+		font-size: 14px;
+		min-width: 0;
+	}
+	.adminbox button {
+		border: 0;
+		border-radius: 99px;
+		background: var(--ink);
+		color: #fff;
+		font-size: 13px;
+		font-weight: 800;
+		padding: 8px 16px;
+	}
+	.adminbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 8px 16px;
+		background: var(--ink);
+		color: #fff;
+		font-size: 13px;
+		font-weight: 700;
+	}
+	.adminbar button {
+		background: none;
+		border: 1px solid #ffffff55;
+		border-radius: 99px;
+		color: #fff;
+		font-size: 12px;
+		font-weight: 700;
+		padding: 4px 12px;
+	}
+	.bubble.hidden {
+		border-style: dashed;
+		opacity: 0.75;
+	}
+	.tag-hidden {
+		display: inline-block;
+		font-size: 11px;
+		font-weight: 800;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: #8f1d1d;
+		background: #fdecec;
+		border-radius: 99px;
+		padding: 2px 10px;
+		margin-bottom: 6px;
 	}
 </style>
