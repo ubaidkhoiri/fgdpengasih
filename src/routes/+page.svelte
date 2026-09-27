@@ -115,6 +115,16 @@
 
 	$effect(() => {
 		const lock = fotoOpen || chatOpen || rdOpen ? 'hidden' : '';
+	$effect(() => {
+		if (typeof location === 'undefined') return;
+		const h = fotoOpen ? 'foto' : chatOpen ? 'chat' : rdOpen ? 'rundown' : '';
+		const cur = location.hash.replace('#', '');
+		if (h && cur !== h) {
+			location.hash = h;
+		} else if (!h && (cur === 'foto' || cur === 'chat' || cur === 'rundown')) {
+			history.replaceState(null, '', location.pathname + location.search);
+		}
+	});
 		document.body.style.overflow = lock;
 		document.documentElement.style.overflow = lock;
 		document.body.style.overscrollBehavior = lock ? 'none' : '';
@@ -146,12 +156,26 @@
 			else if (rdOpen) closeRd();
 			else if (menuOpen) menuOpen = false;
 		};
+		const onHash = () => {
+			const h = location.hash.replace('#', '');
+			if (h === 'foto' && !fotoOpen) openFoto();
+			else if (h === 'chat' && !chatOpen) openChat();
+			else if (h === 'rundown' && !rdOpen) openRd();
+			else if (h !== 'foto' && h !== 'chat' && h !== 'rundown') {
+				if (fotoOpen) closeFoto();
+				else if (chatOpen) closeChat();
+				else if (rdOpen) closeRd();
+			}
+		};
 		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('hashchange', onHash);
+		onHash();
 		document.addEventListener('click', onDoc);
 		document.addEventListener('keydown', onKey);
 		return () => {
 			io.disconnect();
 			window.removeEventListener('scroll', onScroll);
+			window.removeEventListener('hashchange', onHash);
 			document.removeEventListener('click', onDoc);
 			document.removeEventListener('keydown', onKey);
 		};
