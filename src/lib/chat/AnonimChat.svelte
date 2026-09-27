@@ -821,9 +821,11 @@
 		border: 0;
 		border-radius: 20px;
 		padding: 8px 12px;
-		font-size: 14px;
+		font-size: 16px;
 		min-width: 0;
 		background: #fff;
+		color: var(--ink);
+		color-scheme: light;
 	}
 	.composer input:focus {
 		outline: 2px solid #00a884;
@@ -860,8 +862,11 @@
 		border: 1px solid var(--line);
 		border-radius: 99px;
 		padding: 8px 14px;
-		font-size: 14px;
+		font-size: 16px;
 		min-width: 0;
+		background: #fff;
+		color: var(--ink);
+		color-scheme: light;
 	}
 	.adminbox button {
 		border: 0;
